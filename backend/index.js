@@ -3,15 +3,26 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const app = express();
-const port = 3000;
+const port = 5000;
 const authRoutes = require('./routes/authRoutes.js');
 const connectDb = require('./config/dbConnect.js');
 connectDb.connectDB(); // Connect to MongoDB
+const passport = require('passport');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const session = require('express-session');
 
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'yoursecretkey',
+  resave: false,
+  saveUninitialized: false
+}));
+
+// Initialize Passport and sessions
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.use(cors({
 //   origin: [
@@ -28,7 +39,7 @@ app.get("/", (req, res) => {
     })
 })
 
-// app.use("/api/auth", )
+app.use("/api/auth",authRoutes );
 
 app.listen(port, (req, res) => {
     console.log(`Server is running on port ${port}`);

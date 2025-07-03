@@ -13,8 +13,8 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <img
-              className="h-8 w-auto"
-              src="/logo.png" // 👈 Replace with your logo path
+              className="h-30 w-35"
+              src="/public/logo.png" // 👈 Replace with your logo path
               alt="LearnStream Logo"
             />
           </div>
@@ -79,11 +79,47 @@ export default function Navbar() {
               </Transition>
             </Menu>
 
-            {/* Logout */}
+
+                        <Menu as="div" className="relative inline-block text-left">
+              <Menu.Button className="inline-flex items-center text-gray-300 bg-amber-700 p-2 rounded-lg">
+                Profile
+                <ChevronDownIcon className="ml-1 w-5 h-5" />
+              </Menu.Button>
+
+              <Transition
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="border-none origin-top-left absolute 
+                left-0 mt-2 w-40 rounded-md shadow-lg bg-[#1D1C20] text-white  focus:outline-none">
+                  <div className="py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <a href="#" className={`block px-4 py-2 `}>
+                          Profile
+                        </a>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                        <button className="flex items-center text-amber-700 p-2 rounded-l">
+                          <LogoutIcon className="w-5 h-5 mr-1" />
+                          Logout
+                        </button>
+                    </Menu.Item>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+
+            {/* Logout
             <button className="flex items-center bg-amber-700 p-2 rounded-lg hover:text-gray-300">
               <LogoutIcon className="w-5 h-5 mr-1" />
               Logout
-            </button>
+            </button> */}
           </div>
 
           {/* Mobile Hamburger */}

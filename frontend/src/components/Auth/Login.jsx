@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,9 +15,16 @@ const Login = () => {
         console.log(password);
     // For now, let's just navigate to the home page after "logging in"
     if (email && password) {
-      Navigate('/');
+      Navigate('/dashboard');
     }
 }
+
+  const handleGoogleLogin = () => {
+  window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
+  // This will redirect the user to the Google authentication page
+  // After successful authentication, the user will be redirected back to your frontend
+
+};
   return (
 
     <div className="flex items-center justify-center min-h-screen bg-black ">
@@ -27,33 +35,18 @@ const Login = () => {
         
 
         {/* Google Auth Button */}
-        <button
+        <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={(error) => {
+                console.error('Google Login failed:', error);
+                Navigate('/signup'); 
+            }}
           type="button"
           className="flex items-center justify-center w-full border border-gray-200 py-2 rounded mb-6 bg-gray-200 transition-colors focus:outline-none"
-        >
-          <svg
-            className="w-5 h-5 mr-2"
-            viewBox="0 0 533.5 544.3"
-          >
-            <path
-              fill="#4285F4"
-              d="M533.5 278.4c0-18.8-1.5-37-4.4-54.6H272v103.3h147.3c-6.3 33.7-25.2 62.2-53.9 81.3v67h87.1c51.1-47.1 80.5-116.5 80.5-197z"
-            />
-            <path
-              fill="#34A853"
-              d="M272 544.3c72.8 0 133.8-24.1 178.4-65.3l-87.1-67c-24.3 16.3-55.4 25.8-91.3 25.8-70 0-129.3-47.2-150.6-110.6h-90v69.3C85.8 486.7 171.3 544.3 272 544.3z"
-            />
-            <path
-              fill="#FBBC05"
-              d="M121.4 326.2c-10.1-30.2-10.1-62.7 0-92.9v-69.3h-90c-39.2 77.2-39.2 168.8 0 246l90-69.3z"
-            />
-            <path
-              fill="#EA4335"
-              d="M272 107.7c39.7 0 75.4 13.7 103.5 40.7l77.5-77.5C405.8 24.1 344.8 0 272 0 171.3 0 85.8 57.6 31.4 146.7l90 69.3C142.7 154.9 202 107.7 272 107.7z"
-            />
-          </svg>
-          Continue with Google
-        </button>
+          text="signup_with"
+          shape="rectangular"
+          size="large"
+        />
 
 
          

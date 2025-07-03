@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google';
+// import axios from 'axios';
+
 
 const Signup = () => {
     const [username, setUsername] = useState('');
@@ -7,6 +10,7 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const Navigate = useNavigate ();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -19,12 +23,32 @@ const Signup = () => {
         console.log(confirmPassword);
         // For now, let's just navigate to the home page after "signing up"
         if (username && name && email && password && confirmPassword) {
-            Navigate('/');
+            Navigate('/dashboard');
         }
 
     }
 
-    const Navigate = useNavigate ();
+  //   const handleGoogleSignup = async (credentialResponse) => {
+  //   try {
+  //     const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/google-login`, {
+  //       token: credentialResponse.credential,
+  //     });
+  //     localStorage.setItem('token', response.data.token);
+  //     console.log('Google Signup successful:', response.data);
+  //     Navigate('/');
+  //   } catch (err) {
+  //     console.error('Google Signup error:', err);
+  //     Navigate('/signup?error=google');
+  //   }
+  // };
+  const handleGoogleSignup = () => {
+  window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
+  // This will redirect the user to the Google authentication page
+  // After successful authentication, the user will be redirected back to your frontend
+
+};
+
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-black ">
         <div className="w-full bg-gray-900 max-w-lg p-2 space-y-6  rounded-2xl shadow-lg shadow-amber-500" >
@@ -34,11 +58,19 @@ const Signup = () => {
         
 
         {/* Google Auth Button */}
-        <button
+        <GoogleLogin
+            onSuccess={handleGoogleSignup}
+            onError={(error) => {
+                console.error('Google Login failed:', error);
+                Navigate('/login'); 
+            }}
           type="button"
           className="flex items-center justify-center w-full border border-gray-200 py-2 rounded mb-6 bg-gray-200 transition-colors focus:outline-none"
-        >
-          <svg
+          text="signup_with"
+          shape="rectangular"
+          size="large"
+        />
+          {/* <svg
             className="w-5 h-5 mr-2"
             viewBox="0 0 533.5 544.3"
           >
@@ -60,7 +92,7 @@ const Signup = () => {
             />
           </svg>
           Continue with Google
-        </button>
+      </GoogleLogin> */}
 
 
          

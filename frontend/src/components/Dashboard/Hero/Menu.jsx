@@ -25,9 +25,9 @@ const Menu = () => {
         {/* Right: Image */}
         <div className="flex-1">
           <img
-            src="/hero-image.png" // 👈 Replace with your image path
+            src="/public/logo.png" // 👈 Replace with your image path
             alt="LearnStream Hero"
-            className="w-full rounded-lg shadow-lg"
+            className="w-full rounded-lg shadow-lg shadow-amber-500/30 transition-transform transform hover:scale-105"
           />
         </div>
 
