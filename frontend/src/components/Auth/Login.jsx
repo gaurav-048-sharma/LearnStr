@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,14 +9,19 @@ const Login = () => {
   const Navigate = useNavigate();
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically handle the login logic, e.g., API call
-        console.log(email);
-        console.log(password);
-    // For now, let's just navigate to the home page after "logging in"
-    if (email && password) {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+        email,
+        password,
+      });
+      localStorage.setItem('token', response.data.token);
+      console.log('Login successful:', response.data);
       Navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error);
+
     }
 }
 
@@ -28,12 +34,9 @@ const Login = () => {
   return (
 
     <div className="flex items-center justify-center min-h-screen bg-black ">
-      <div className="w-full bg-gray-900 max-w-lg p-2 space-y-6  rounded-2xl shadow-lg shadow-amber-500" >
-      <form onClick={handleSubmit} className="bg-black p-10 rounded-2xl shadow-md w-full max-w-lg ">
+      <div className="w-full bg-[#1D1C20] max-w-lg p-2 space-y-6  rounded-2xl shadow-lg shadow-amber-500" >
         <h2 className="text-2xl font-bold  text-center text-gray-300">Welcome to learnStream</h2>
         <p className="text-gray-600 mb-6 text-center">Sign up to start your journey with us</p>
-        
-
         {/* Google Auth Button */}
         <GoogleLogin
             onSuccess={handleGoogleLogin}
@@ -47,9 +50,7 @@ const Login = () => {
           shape="rectangular"
           size="large"
         />
-
-
-         
+      <form onSubmit={handleSubmit} className="bg-black p-10 rounded-2xl shadow-md w-full max-w-lg ">
          <div className="flex items-center my-6">
             <hr className="flex-grow border-t border-gray-700" />
             <span className="mx-4 text-gray-500">OR</span>
@@ -85,9 +86,9 @@ const Login = () => {
         </div>
                 <button
           type="submit"
-          className="mt-4 w-full bg-amber-600 text-white py-2 rounded hover:bg-amber-600 transition-colors"
+          className="mt-4 w-full bg-amber-600 text-white py-2 rounded hover:bg-amber-600 transition-colors cursor-pointer"
         >
-          Sign In
+          Login
         </button>
         <div className="mt-6 ">
             <p className="mt-4 text-center text-gray-500">

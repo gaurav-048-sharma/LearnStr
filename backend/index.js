@@ -1,13 +1,26 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 const app = express();
 const port = 5000;
 const authRoutes = require('./routes/authRoutes.js');
+const userRoutes = require('./routes/userRoutes.js');
 const connectDb = require('./config/dbConnect.js');
 connectDb.connectDB(); // Connect to MongoDB
 const passport = require('passport');
+const cors = require("cors");
+
+app.use(cors( {
+    origin: process.env.FRONTEND_URL,
+    // [
+    //     'http://localhost:5173',
+    //     process.env.BASE_URL || 'https://digipin-msu7-git-main-gaurav-sharmas-projects-97aa0168.vercel.app',
+    // ],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+}))
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -40,6 +53,11 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/auth",authRoutes );
+// console.log("Auth routes loaded", authRoutes);
+console.log("User routes loaded", userRoutes);
+// app.use("/api/users", userRoutes);
+
+
 
 app.listen(port, (req, res) => {
     console.log(`Server is running on port ${port}`);

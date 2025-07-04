@@ -16,7 +16,7 @@ export default function AuthCallback() {
   }, []);
 
   return <div>Signing you in...</div>;
-}
+} 
 
 
 // // src/components/Auth/AuthCallback.jsx

@@ -162,6 +162,82 @@ module.exports.googleLogin = async (req, res) => {
     res.status(500).json({ message: 'Google authentication failed', error: err.message });
   }
 };
+// module.exports.getUser = async (req, res) => {
+//     try {
+//         const user = await User.find().select("-password");
+//         if(!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+
+//         res.status(200).json(user);
+//         console.log("username",user.username)
+//     } catch (error) {
+//         console.error(error);
+//         res.status(400).json({ error: "Failed to fetch users", details: error.message});
+//     }
+// }
+exports.getUser = async (req, res) => {
+
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+  // try {
+  //   const { username } = req.params;
+  //   const user = await User.findOne({ username });
+  //   if (!user) {
+  //     //console.log(`User not found: ${username}`);
+  //     return res.status(404).json({ message: 'User not found' });
+  //   }
+
+  //   // const user = await UserProfile.findOne({ authId: auth._id });
+  //   // if (!user) {
+  //   //   //console.log(`User profile not found for authId: ${auth._id}`);
+  //   //   return res.status(404).json({ message: 'User profile not found' });
+  //   // }
+
+  //   const responseData = {
+  //     _id: user._id, // Include MongoDB ID
+  //     userId: {
+  //       username: user.username,
+  //       name: user.name,
+  //     },
+  //   };
+  //   //console.log(`Fetched user: ${username}`, responseData);
+  //   res.status(200).json(responseData);
+  // } catch (err) {
+  //   //console.error('Get User Error:', err);
+  //   res.status(500).json({ message: 'Server error' });
+  // }
+};
+
+module.exports.getUserProfile = async (req, res) => {
+      try {
+        const userId = req.params.id === 'me' ? req.user.userId : req.params.id;
+        const user = await User.findById(userId).select("-password");
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json(user);
+        console.log('User profile fetched successfully:', user.username);
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ error: "Failed to fetch user", details: error.message });
+    }
+    // try {
+    //     const user = await User.find().select("-password");
+    //     if(!user) {
+    //         return res.status(404).json({ error: "User not found" });
+    //     }
+
+    //     res.status(200).json(user);
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(400).json({ error: "Failed to fetch users", details: error.message});
+    // }
+}
 
 module.exports.logout = async (req, res) => {
     try {

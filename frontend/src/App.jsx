@@ -5,28 +5,51 @@ import Layout from './components/Layout.jsx'
 // import Hero from './components/Dashboard/Hero.jsx'
 import Dashboard from './components/Dashboard/Dashboard.jsx';
 import AuthCallback from './components/Auth/AuthCallback.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import PublicRoute from './components/PublicRoute.jsx';
 
 function App() {
 
 
   return (
     <>
-    <Routes>
-      {/* Routes WITH Navbar */}
-      <Route element={<Layout />}>
+<Routes>
+  {/* Shell layout */}
+  <Route element={<Layout />}>
+  <Route path='/' element={<Dashboard />} />
+    <Route
+      path="/dashboard"
+      element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      }
+    />
+  </Route>
 
-             {/* <Route path="/" element={<Hero />} /> */}
-             
-             <Route path="/dashboard" element={<Dashboard />} />
-      </Route>
+  {/* Public routes */}
+  <Route
+    path="/login"
+    element={
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
+    }
+  />
+  <Route
+    path="/signup"
+    element={
+      <PublicRoute>
+        <Signup />
+      </PublicRoute>
+    }
+  />
 
-      {/* Routes WITHOUT Navbar */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+  <Route path="/auth/callback" element={<AuthCallback />} />
+</Routes>
 
-      {/* Google Auth Callback */}
-        <Route path="/auth/callback" element={<AuthCallback />} />
-    </Routes>
+   
+
     </>
   )
 }

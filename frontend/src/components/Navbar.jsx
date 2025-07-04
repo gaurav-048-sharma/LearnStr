@@ -1,9 +1,83 @@
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon, LogoutIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { useNavigate } from 'react-router-dom'
+import axios from "axios";
+
+
+// import jwtDecode from 'jwt-decode';
+
+// const decoded = jwtDecode(token);
+// const _id = decoded.id;
 
 export default function Navbar() {
+  const Navigate = useNavigate();
+  // State to manage mobile menu open/close
   const [isOpen, setIsOpen] = useState(false);
+  const [users, setUsers] = useState({});
+  // const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   // setIsAuthenticated(!!token);
+  // }, [Navigate]);
+
+ const handleLogout = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // setIsAuthenticated(false);
+      Navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) throw new Error('Logout failed');
+      localStorage.removeItem('token');
+      // setIsAuthenticated(false);
+      Navigate('/login');
+    } catch (error) {
+      console.error('Logout Error:', error);
+      // Proceed with logout even if server fails (client-side cleanup)
+      localStorage.removeItem('token');
+      // setIsAuthenticated(false);
+      Navigate('/login');
+    }
+  };
+
+
+// useEffect to call it when component mounts:
+useEffect(() => {
+  const handleUserProfile = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      Navigate('/login');
+      return;
+    }
+
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    console.log("response",response.data); // 👉 contains _id, username, email, etc.
+    // Do whatever with response.data
+    setUsers(response.data)
+  } catch (error) {
+    console.log(error);
+    Navigate('/dashboard');
+  }
+};
+
+  handleUserProfile();
+}, []);
+
 
   return (
     <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 w-[95%]
@@ -80,9 +154,9 @@ export default function Navbar() {
             </Menu>
 
 
-                        <Menu as="div" className="relative inline-block text-left">
-              <Menu.Button className="inline-flex items-center text-gray-300 bg-amber-700 p-2 rounded-lg">
-                Profile
+            <Menu as="div" className="relative inline-block text-left">
+              <Menu.Button className="inline-flex items-center text-gray-300 bg-amber-700 p-2 rounded-lg cursor-pointer">
+                 {users.email || 'Loading...'}
                 <ChevronDownIcon className="ml-1 w-5 h-5" />
               </Menu.Button>
 
@@ -98,16 +172,16 @@ export default function Navbar() {
                 left-0 mt-2 w-40 rounded-md shadow-lg bg-[#1D1C20] text-white  focus:outline-none">
                   <div className="py-1">
                     <Menu.Item>
-                      {({ active }) => (
+                     
                         <a href="#" className={`block px-4 py-2 `}>
-                          Profile
+                            {users.username || 'Loading...'}
                         </a>
-                      )}
+                    
                     </Menu.Item>
                     <Menu.Item>
-                        <button className="flex items-center text-amber-700 p-2 rounded-l">
+                        <button  onClick={handleLogout} className="flex items-center text-amber-700 p-2 rounded-l cursor-pointer">
                           <LogoutIcon className="w-5 h-5 mr-1" />
-                          Logout
+                                 Logout
                         </button>
                     </Menu.Item>
                   </div>
