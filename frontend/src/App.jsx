@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard/Dashboard.jsx';
 import AuthCallback from './components/Auth/AuthCallback.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
+import SyllabusPage from './components/Dashboard/Pages/SyllabusPage.jsx'
 
 function App() {
 
@@ -17,14 +18,8 @@ function App() {
   {/* Shell layout */}
   <Route element={<Layout />}>
   <Route path='/' element={<Dashboard />} />
-    <Route
-      path="/dashboard"
-      element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      }
-    />
+    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
+    <Route path='/syllabuspage' element={<ProtectedRoute><SyllabusPage/></ProtectedRoute> }/>
   </Route>
 
   {/* Public routes */}
