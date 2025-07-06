@@ -9,7 +9,7 @@ const axios = require("axios");
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID; // From .env
 const client = new OAuth2Client(CLIENT_ID);
 
-module.exports.register = async (req, res) => {
+const register = async (req, res) => {
     try {
         const { username, name, email, password } = req.body;
         console.log('Received registration data:', { username, name, email });
@@ -52,7 +52,7 @@ module.exports.register = async (req, res) => {
     }
 }
 
-module.exports.login = async (req, res) => {
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -82,108 +82,38 @@ module.exports.login = async (req, res) => {
         res.status(500).json({ error: "An error occurred during login" });
     }
 };
-// module.exports.googleLogin = async (req, res) => {
-//     try {
-//         const { googleId, email, name } = req.body;
-//         if (!googleId || !email || !name) {
-//             return res.status(400).json({ message: "Google ID, email, and name are required" });
-//         }
-//         let user = await User.findOne({ googleId });
-//         if (!user) {
-//             user = new User({
-//                 googleId,
-//                 email,
-//                 name,
-//                 segregation: User.segregateUser(email)
-//             });
-//             await user.save();
-//         }
-//         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-//         res.status(200).json({ message: 'Google login successful', user, token });
-//     } catch (error) {
-//         console.error('Error during Google login:', error);
-//         res.status(500).json({ message: 'Internal server error' });
-//     }
-// };
 
-module.exports.googleLogin = async (req, res) => {
-  try {
-    const { token } = req.body;
 
-    if (!token) {
-      return res.status(400).json({ message: 'Token is required' });
+const logout = async (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const blacklistedToken = new blacklistToken({ token });
+        await blacklistedToken.save();
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (err) {
+        //console.error('Logout Error:', err);
+        res.status(400).json({ error: err.message });
     }
-
-    // Verify the Google ID token with Google servers
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-
-    const payload = ticket.getPayload();
-    const { email, name, sub: googleId } = payload;
-
-    if (!email) {
-      return res.status(400).json({ message: 'Email not found in Google payload' });
-    }
-
-    // Make a username (optional fallback)
-    const username = name ? name.replace(/\s+/g, '').toLowerCase() : email.split('@')[0];
-
-    // Check if user exists
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      user = new User({
-        email,
-        name: name || username,
-        googleId,
-        username,
-      });
-      await user.save();
-    } else {
-      // If user exists but doesn't have googleId yet, attach it
-      if (!user.googleId) {
-        user.googleId = googleId;
-        await user.save();
-      }
-    }
-
-    // Generate JWT
-    const tokenJwt = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    res.status(200).json({ message: 'Google login successful', token: tokenJwt });
-  } catch (err) {
-    console.error('Google Login Error:', err);
-    res.status(500).json({ message: 'Google authentication failed', error: err.message });
-  }
 };
-// module.exports.getUser = async (req, res) => {
-//     try {
-//         const user = await User.find().select("-password");
-//         if(!user) {
-//             return res.status(404).json({ error: "User not found" });
-//         }
 
-//         res.status(200).json(user);
-//         console.log("username",user.username)
-//     } catch (error) {
-//         console.error(error);
-//         res.status(400).json({ error: "Failed to fetch users", details: error.message});
-//     }
-// }
-exports.getUser = async (req, res) => {
-
+const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
+
+};
+
+module.exports = {  
+  getUser,
+  login,
+  register,
+  logout
+}
+
+
   // try {
   //   const { username } = req.params;
   //   const user = await User.findOne({ username });
@@ -211,42 +141,160 @@ exports.getUser = async (req, res) => {
   //   //console.error('Get User Error:', err);
   //   res.status(500).json({ message: 'Server error' });
   // }
-};
+// module.exports.googleLogin = async (req, res) => {
+//     try {
+//         const { googleId, email, name } = req.body;
+//         if (!googleId || !email || !name) {
+//             return res.status(400).json({ message: "Google ID, email, and name are required" });
+//         }
+//         let user = await User.findOne({ googleId });
+//         if (!user) {
+//             user = new User({
+//                 googleId,
+//                 email,
+//                 name,
+//                 segregation: User.segregateUser(email)
+//             });
+//             await user.save();
+//         }
+//         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+//         res.status(200).json({ message: 'Google login successful', user, token });
+//     } catch (error) {
+//         console.error('Error during Google login:', error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// };
 
-module.exports.getUserProfile = async (req, res) => {
-      try {
-        const userId = req.params.id === 'me' ? req.user.userId : req.params.id;
-        const user = await User.findById(userId).select("-password");
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        res.status(200).json(user);
-        console.log('User profile fetched successfully:', user.username);
-    } catch (error) {
-        console.error(error);
-        res.status(400).json({ error: "Failed to fetch user", details: error.message });
-    }
-    // try {
-    //     const user = await User.find().select("-password");
-    //     if(!user) {
-    //         return res.status(404).json({ error: "User not found" });
-    //     }
+// const googleLogin = async (req, res) => {
+//   try {
+//     const { token } = req.body;
 
-    //     res.status(200).json(user);
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(400).json({ error: "Failed to fetch users", details: error.message});
-    // }
-}
+//     if (!token) {
+//       return res.status(400).json({ message: 'Token is required' });
+//     }
 
-module.exports.logout = async (req, res) => {
-    try {
-        const token = req.headers.authorization.split(" ")[1];
-        const blacklistedToken = new blacklistToken({ token });
-        await blacklistedToken.save();
-        res.status(200).json({ message: 'Logout successful' });
-    } catch (err) {
-        //console.error('Logout Error:', err);
-        res.status(400).json({ error: err.message });
-    }
-};
+//     // Verify the Google ID token with Google servers
+//     const ticket = await client.verifyIdToken({
+//       idToken: token,
+//       audience: process.env.GOOGLE_CLIENT_ID,
+//     });
+
+//     const payload = ticket.getPayload();
+//     const { email, name, sub: googleId } = payload;
+
+//     if (!email) {
+//       return res.status(400).json({ message: 'Email not found in Google payload' });
+//     }
+
+//     // Make a username (optional fallback)
+//     const username = name ? name.replace(/\s+/g, '').toLowerCase() : email.split('@')[0];
+
+//     // Check if user exists
+//     let user = await User.findOne({ email });
+
+//     if (!user) {
+//       user = new User({
+//         email,
+//         name: name || username,
+//         googleId,
+//         username,
+//       });
+//       await user.save();
+//     } else {
+//       // If user exists but doesn't have googleId yet, attach it
+//       if (!user.googleId) {
+//         user.googleId = googleId;
+//         await user.save();
+//       }
+//     }
+
+//     // Generate JWT
+//     const tokenJwt = jwt.sign(
+//       { id: user._id, email: user.email },
+//       process.env.JWT_SECRET,
+//       { expiresIn: '7d' }
+//     );
+
+//     res.status(200).json({ message: 'Google login successful', token: tokenJwt });
+//   } catch (err) {
+//     console.error('Google Login Error:', err);
+//     res.status(500).json({ message: 'Google authentication failed', error: err.message });
+//   }
+// };
+// module.exports.getUser = async (req, res) => {
+//     try {
+//         const user = await User.find().select("-password");
+//         if(!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+
+//         res.status(200).json(user);
+//         console.log("username",user.username)
+//     } catch (error) {
+//         console.error(error);
+//         res.status(400).json({ error: "Failed to fetch users", details: error.message});
+//     }
+// }
+// const getUser = async (req, res) => {
+
+//   try {
+//     const user = await User.findById(req.user.id).select('-password');
+//     res.json(user);
+//   } catch (err) {
+//     res.status(500).json({ message: 'Server error' });
+//   }
+  // try {
+  //   const { username } = req.params;
+  //   const user = await User.findOne({ username });
+  //   if (!user) {
+  //     //console.log(`User not found: ${username}`);
+  //     return res.status(404).json({ message: 'User not found' });
+  //   }
+
+  //   // const user = await UserProfile.findOne({ authId: auth._id });
+  //   // if (!user) {
+  //   //   //console.log(`User profile not found for authId: ${auth._id}`);
+  //   //   return res.status(404).json({ message: 'User profile not found' });
+  //   // }
+
+  //   const responseData = {
+  //     _id: user._id, // Include MongoDB ID
+  //     userId: {
+  //       username: user.username,
+  //       name: user.name,
+  //     },
+  //   };
+  //   //console.log(`Fetched user: ${username}`, responseData);
+  //   res.status(200).json(responseData);
+  // } catch (err) {
+  //   //console.error('Get User Error:', err);
+  //   res.status(500).json({ message: 'Server error' });
+  // }
+//};
+
+// module.exports.getUserProfile = async (req, res) => {
+//       try {
+//         const userId = req.params.id === 'me' ? req.user.userId : req.params.id;
+//         const user = await User.findById(userId).select("-password");
+//         if (!user) {
+//             return res.status(404).json({ error: "User not found" });
+//         }
+//         res.status(200).json(user);
+//         console.log('User profile fetched successfully:', user.username);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(400).json({ error: "Failed to fetch user", details: error.message });
+//     }
+//     // try {
+//     //     const user = await User.find().select("-password");
+//     //     if(!user) {
+//     //         return res.status(404).json({ error: "User not found" });
+//     //     }
+
+//     //     res.status(200).json(user);
+//     // } catch (error) {
+//     //     console.error(error);
+//     //     res.status(400).json({ error: "Failed to fetch users", details: error.message});
+//     // }
+// }
+

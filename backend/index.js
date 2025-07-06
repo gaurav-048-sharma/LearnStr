@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 const port = 5000;
 const authRoutes = require('./routes/authRoutes.js');
-const userRoutes = require('./routes/userRoutes.js');
+// const userRoutes = require('./routes/userRoutes.js');
 const connectDb = require('./config/dbConnect.js');
 connectDb.connectDB(); // Connect to MongoDB
 const passport = require('passport');
@@ -54,7 +54,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth",authRoutes );
 // console.log("Auth routes loaded", authRoutes);
-console.log("User routes loaded", userRoutes);
+// console.log("User routes loaded", userRoutes);
 // app.use("/api/users", userRoutes);
 
 

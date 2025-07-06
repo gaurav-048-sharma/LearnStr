@@ -35,6 +35,12 @@ const userSchema = new Schema({
         sparse: true, // Still allows nulls to be excluded from index
         default: undefined // Avoid indexing null values entirely
     },
+    role: {
+        type: String,
+        enum: ['student', 'teacher'],
+        required: true,
+        default: 'student',
+    },
     created_at: {
         type: Date,
         default: Date.now

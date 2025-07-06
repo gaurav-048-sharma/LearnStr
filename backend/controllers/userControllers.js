@@ -1,17 +1,34 @@
 const User  = require("../models/userModels.js");
 
 
-module.exports.getUserProfile = async (req, res) => {
-    try {
-        const user = await User.find().select("-password");
-        if(!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
+const updateUserRole = async (req, res) => {
+  try {
+    const userId = req.user.id; // 👈 comes from auth middleware
+    const { role } = req.body;
 
-        res.status(200).json(user);
-        console.log(user.username)
-    } catch (error) {
-        console.error(error);
-        res.status(400).json({ error: "Failed to fetch users", details: error.message});
+    if (!['student', 'teacher'].includes(role)) {
+      return res.status(400).json({ message: 'Invalid role' });
     }
-}
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { role },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: `Role updated to ${role}`,
+      user: {
+        _id: updatedUser._id,
+        username: updatedUser.username,
+        role: updatedUser.role,
+      },
+    });
+
+  } catch (error) {
+    console.error('Error updating role:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = {updateUserRole};
