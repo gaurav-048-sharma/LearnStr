@@ -8,6 +8,7 @@ import AuthCallback from './components/Auth/AuthCallback.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
 import SyllabusPage from './components/Dashboard/Pages/SyllabusPage.jsx'
+import Home from './components/Dashboard/Home.jsx';
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
 <Routes>
   {/* Shell layout */}
   <Route element={<Layout />}>
-  <Route path='/' element={<Dashboard />} />
+  <Route path='/' element={<Home />} />
     <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
     <Route path='/syllabuspage' element={<ProtectedRoute><SyllabusPage/></ProtectedRoute> }/>
   </Route>

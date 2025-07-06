@@ -17,7 +17,7 @@ router.get('/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/login' }),
   (req, res) => {
     // Here `req.user` is set by your strategy
-    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
     // Send it as redirect or JSON
     res.redirect(`http://localhost:5173/auth/callback?token=${token}`);
   }
