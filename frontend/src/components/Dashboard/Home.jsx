@@ -24,12 +24,16 @@ const Home = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col justify-center items-center bg-cover bg-center"
+      className="relative min-h-screen flex flex-col justify-center items-center bg-cover bg-center "
       style={{
-        backgroundImage: `url('https://source.unsplash.com/1600x900/?classroom,education')`,
+        backgroundImage: `url('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
       }}
     >
-      <div className="bg-black bg-opacity-70 p-12 rounded-2xl shadow-2xl text-center">
+          {/* BLACK ALPHA LAYER */}
+       <div className="absolute inset-0 bg-black opacity-50"></div>
+
+
+      <div className="bg-[#000]/70 opacity-70 p-12 rounded-2xl shadow-2xl text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
           Welcome to LearnStream
         </h1>

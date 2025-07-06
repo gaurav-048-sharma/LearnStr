@@ -37,6 +37,6 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/logout', checkBlacklist, authController.logout);
 router.get('/profile', authMiddleware, authController.getUser);
-router.patch("/update-role",protectMiddleware, updateUserRole.updateUserRole )
+router.patch("/update-role",authMiddleware, updateUserRole.updateUserRole )
 module.exports = router;
 

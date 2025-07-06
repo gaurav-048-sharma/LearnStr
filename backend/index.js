@@ -16,7 +16,7 @@ app.use(cors( {
     //     'http://localhost:5173',
     //     process.env.BASE_URL || 'https://digipin-msu7-git-main-gaurav-sharmas-projects-97aa0168.vercel.app',
     // ],
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true,
 }))
 

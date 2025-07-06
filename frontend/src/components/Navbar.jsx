@@ -65,7 +65,6 @@ useEffect(() => {
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
-
     console.log("response",response.data); // 👉 contains _id, username, email, etc.
     // Do whatever with response.data
     setUsers(response.data)
@@ -176,7 +175,15 @@ useEffect(() => {
                         <a href="#" className={`block px-4 py-2 `}>
                             {users.username || 'Loading...'}
                         </a>
+                          {/* <a href="#" className={`block px-4 py-2 `}>
+                            {users.role}
+                        </a> */}
                     
+                    </Menu.Item>
+                    <Menu.Item>
+                        <a href="#" className={`block px-4 py-2 `}>
+                            {users.role || 'Loading...'}
+                        </a>
                     </Menu.Item>
                     <Menu.Item>
                         <button  onClick={handleLogout} className="flex items-center text-amber-700 p-2 rounded-l cursor-pointer">

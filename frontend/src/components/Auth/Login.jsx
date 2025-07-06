@@ -18,7 +18,7 @@ const Login = () => {
       });
       localStorage.setItem('token', response.data.token);
       console.log('Login successful:', response.data);
-      Navigate('/dashboard');
+      Navigate('/');
     } catch (error) {
       console.error('Login error:', error);
 
@@ -34,7 +34,7 @@ const Login = () => {
   return (
 
     <div className="flex items-center justify-center min-h-screen bg-black ">
-      <div className="w-full bg-[#1D1C20] max-w-lg p-2 space-y-6  rounded-2xl shadow-lg shadow-amber-500" >
+      <div className="w-full bg-black max-w-lg p-2 space-y-6  rounded-2xl shadow-lg shadow-amber-500" >
         <h2 className="text-2xl font-bold  text-center text-gray-300">Welcome to learnStream</h2>
         <p className="text-gray-600 mb-6 text-center">Sign up to start your journey with us</p>
         {/* Google Auth Button */}
@@ -50,7 +50,7 @@ const Login = () => {
           shape="rectangular"
           size="large"
         />
-      <form onSubmit={handleSubmit} className="bg-black p-10 rounded-2xl shadow-md w-full max-w-lg ">
+      <form onSubmit={handleSubmit} className="bg-black p-10 rounded-2xl shadow-sm shadow-amber-500 w-full max-w-lg ">
          <div className="flex items-center my-6">
             <hr className="flex-grow border-t border-gray-700" />
             <span className="mx-4 text-gray-500">OR</span>
