@@ -6,7 +6,7 @@ import axios from 'axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
 
   const handleSubmit = async (e) => {
@@ -16,9 +16,9 @@ const Login = () => {
         email,
         password,
       });
-      localStorage.setItem('token', response.data.token);
-      console.log('Login successful:', response.data);
-      Navigate('/');
+    console.log('Login response:', response.data);
+    localStorage.setItem('token', response.data.token);
+    console.log('Saved token:', localStorage.getItem('token'));
     } catch (error) {
       console.error('Login error:', error);
 
@@ -34,7 +34,7 @@ const Login = () => {
   return (
 
     <div className="flex items-center justify-center min-h-screen bg-black ">
-      <div className="w-full bg-black max-w-lg p-2 space-y-6  rounded-2xl shadow-lg shadow-amber-500" >
+      <div className="w-full bg-black max-w-lg p-2 space-y-6  rounded-2xl shadow-sm shadow-amber-500" >
         <h2 className="text-2xl font-bold  text-center text-gray-300">Welcome to learnStream</h2>
         <p className="text-gray-600 mb-6 text-center">Sign up to start your journey with us</p>
         {/* Google Auth Button */}
@@ -42,7 +42,7 @@ const Login = () => {
             onSuccess={handleGoogleLogin}
             onError={(error) => {
                 console.error('Google Login failed:', error);
-                Navigate('/signup'); 
+                navigate('/signup'); 
             }}
           type="button"
           className="flex items-center justify-center w-full border border-gray-200 py-2 rounded mb-6 bg-gray-200 transition-colors focus:outline-none"
@@ -50,12 +50,13 @@ const Login = () => {
           shape="rectangular"
           size="large"
         />
-      <form onSubmit={handleSubmit} className="bg-black p-10 rounded-2xl shadow-sm shadow-amber-500 w-full max-w-lg ">
-         <div className="flex items-center my-6">
+          <div className="flex items-center my-3">
             <hr className="flex-grow border-t border-gray-700" />
             <span className="mx-4 text-gray-500">OR</span>
             <hr className="flex-grow border-t border-gray-700" />
         </div>
+      <form onSubmit={handleSubmit} className="bg-black  p-10 rounded-2xl shadow-sm shadow-amber-500 w-full max-w-lg ">
+
 
         {/* Email/Password Inputs */}
         <div className="mb-4">
@@ -92,7 +93,7 @@ const Login = () => {
         </button>
         <div className="mt-6 ">
             <p className="mt-4 text-center text-gray-500">
-                Don't have an account? <span onClick={() => Navigate('/signup')} className="text-amber-600 hover:underline">Sign Up</span>
+                Don't have an account? <span onClick={() => navigate('/signup')} className="text-amber-600 hover:underline">Sign Up</span>
             </p>
         </div>
       </form>

@@ -6,13 +6,13 @@ const Home = () => {
   const navigate = useNavigate();
     const chooseRole = async (role) => {
   try {
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
     const response = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/update-role`,{ role },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      // {
+      //   headers: { Authorization: `Bearer ${token}` },
+      // }
     );
-      localStorage.setItem('token', response.data.token);
+      // localStorage.setItem('token', response.data.token);
       console.log('Update successful:', response.data);
       navigate('/dashboard');
   } catch (error) {
@@ -43,13 +43,13 @@ const Home = () => {
 
         <div className="flex flex-col md:flex-row gap-6">
           <button
-            onClick={() => chooseRole('teacher')}
+            onClick={() => chooseRole('student')}
             className="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
           >
             Login as Student
           </button>
           <button
-            onClick={() => chooseRole('student')}
+            onClick={() => chooseRole('teacher')}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Login as Teacher

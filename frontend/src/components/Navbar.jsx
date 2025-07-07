@@ -65,6 +65,7 @@ useEffect(() => {
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     });
+    localStorage.setItem("token", response.data.token)
     console.log("response",response.data); // 👉 contains _id, username, email, etc.
     // Do whatever with response.data
     setUsers(response.data)
