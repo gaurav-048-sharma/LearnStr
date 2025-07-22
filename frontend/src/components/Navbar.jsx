@@ -1,4 +1,4 @@
-import { useState ,useEffect } from "react";
+import { useEffect, useState  } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon, LogoutIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useNavigate } from 'react-router-dom'
@@ -21,6 +21,32 @@ export default function Navbar() {
   //   const token = localStorage.getItem('token');
   //   // setIsAuthenticated(!!token);
   // }, [Navigate]);
+
+
+    useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          Navigate('/login');
+          return;
+        }
+
+        const response = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Profile fetch error:', error);
+        Navigate('/login');
+      }
+    };
+
+    fetchUserProfile();
+  }, [Navigate]);
 
  const handleLogout = async () => {
     const token = localStorage.getItem('token');
@@ -52,31 +78,33 @@ export default function Navbar() {
   };
 
 
-// useEffect to call it when component mounts:
-useEffect(() => {
-  const handleUserProfile = async () => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      Navigate('/login');
-      return;
-    }
+// // useEffect to call it when component mounts:
+// useEffect(() => {
+//   const handleUserProfile = async () => {
+//   try {
+//     const token = localStorage.getItem('token');
+//     if (!token) {
+//       Navigate('/login');
+//       return;
+//     }
 
-    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    localStorage.setItem("token", response.data.token)
-    console.log("response",response.data); // 👉 contains _id, username, email, etc.
-    // Do whatever with response.data
-    setUsers(response.data)
-  } catch (error) {
-    console.log(error);
-    Navigate('/dashboard');
-  }
-};
+//     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/profile`, 
+//     //   {
+//     //   headers: { Authorization: `Bearer ${token}` }
+//     // }
+//   );
+//     localStorage.setItem("token", response.data.token)
+//     console.log("response",response.data); // 👉 contains _id, username, email, etc.
+//     // Do whatever with response.data
+//     setUsers(response.data)
+//   } catch (error) {
+//     console.log(error);
+//     Navigate('/dashboard');
+//   }
+// };
 
-  handleUserProfile();
-}, []);
+//   handleUserProfile();
+// }, []);
 
 
   return (
@@ -156,7 +184,7 @@ useEffect(() => {
 
             <Menu as="div" className="relative inline-block text-left">
               <Menu.Button className="inline-flex items-center text-gray-300 bg-amber-700 p-2 rounded-lg cursor-pointer">
-                 {users.email || 'Loading...'}
+                 {users.email || 'Loading...'} 
                 <ChevronDownIcon className="ml-1 w-5 h-5" />
               </Menu.Button>
 

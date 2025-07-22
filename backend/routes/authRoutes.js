@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authControllers.js');
-const updateUserRole = require("../controllers/userControllers.js")
+//const updateUserRole = require("../controllers/userControllers.js")
 const checkBlacklist = require('../middlewares/checkBlackListToken.js');
 const passport = require('passport');
 const authMiddleware = require("../middlewares/authMiddleware.js");
 const jwt = require('jsonwebtoken');
-const protectMiddleware = require("../middlewares/protectMiddleware.js")
+//const protectMiddleware = require("../middlewares/protectMiddleware.js")
 require('../config/passport.js');
 
 // router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));    
@@ -37,6 +37,6 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/logout', checkBlacklist, authController.logout);
 router.get('/profile', authMiddleware, authController.getUser);
-router.patch("/update-role",authMiddleware, updateUserRole.updateUserRole )
+// router.patch("/update-role",protectMiddleware, updateUserRole.updateUserRole )
 module.exports = router;
 

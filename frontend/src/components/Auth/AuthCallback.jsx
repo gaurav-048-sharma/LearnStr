@@ -9,7 +9,7 @@ export default function AuthCallback() {
     const token = searchParams.get('token');
     if (token) {
       localStorage.setItem('token', token);
-      navigate('/');
+      navigate('/dashboard');
     } else {
       navigate('/login');
     }

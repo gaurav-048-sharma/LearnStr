@@ -6,24 +6,61 @@ import axios from 'axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+    // const [formData, setFormData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
+
+  //   const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,{
         email,
         password,
       });
-    console.log('Login response:', response.data);
-    localStorage.setItem('token', response.data.token);
-    console.log('Saved token:', localStorage.getItem('token'));
+      localStorage.setItem('token', response.data.token);
+      console.log('Manual Login successful:', response.data);
+      navigate('/dashboard'); // Redirect to dashboard
     } catch (error) {
-      console.error('Login error:', error);
-
+         alert(error.response?.data?.message || 'Login failed.');
     }
-}
+  };
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//   try {
+    
+//     const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+//       email,
+//       password,
+//     });
+
+//     console.log('Login response:', response.data);
+
+//     if (response.data.token) {
+//       localStorage.setItem('token', response.data.token);
+//       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+//       console.log('Saved token:', localStorage.getItem('token'));
+
+//       if (response.data.role === 'student') {
+//         navigate('/dashboard');
+//       } else if (response.data.role === 'teacher') {
+//         navigate('/teacher-dashboard');
+//       } else {
+//         navigate('/dashboard');
+//       }
+//     } else {
+//       console.error('No token received!');
+//     }
+
+//   } catch (error) {
+//     console.error('Login error:', error);
+//     alert(error.response?.data?.message || 'Login failed.');
+//   }
+// };
+
 
   const handleGoogleLogin = () => {
   window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
@@ -67,6 +104,8 @@ const Login = () => {
             className="w-full px-4 py-2 text-gray-500 border-1 border-gray-700 rounded focus:outline-none"
             placeholder="john@gmail.com"
             onChange={(e) => setEmail(e.target.value)}
+            // onChange={handleChange}
+            // value={formData?.email}
             value={email}
           />
         </div>
@@ -79,6 +118,7 @@ const Login = () => {
             placeholder="••••••••"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
+
           />
         </div>
 

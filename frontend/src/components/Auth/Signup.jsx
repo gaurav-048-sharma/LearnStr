@@ -9,36 +9,72 @@ const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
     const Navigate = useNavigate();
-
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
-            username,
-            name,
-            email,
-            password,
-          }) 
-           if (response.data.token) {
-                localStorage.setItem('token', response.data.token);
-                alert('Signup and verification successful!');
-                Navigate('/login');
-          }
-          // localStorage.getItem("token", response.data.token);
-          console.log(response.data.token)
-        } catch(error) {
-          console.log(error)
-          Navigate("/login");
-          alert(error.response?.data?.error || 'Signup failed');
-        }
-  
-        // For now, let's just navigate to the home page after "signing up"
-        // if (username && name && email && password ) {
-        //     Navigate('/dashboard');
-        // }
+  e.preventDefault();
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
+      username,
+      name,
+      email,
+      password,
+      role,
+    });
 
+    // Store token first (if your backend sends it)
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      Navigate('/dashboard');
     }
+
+    alert('Signup successful!');
+
+    // // Navigate based on role
+    // if (response.data.role === 'student') {
+    //   Navigate('/student-dashboard');
+    // } else if (response.data.role === 'teacher') {
+    //   Navigate('/teacher-dashboard');
+    // } else {
+    //   // fallback if no role matched
+    //   Navigate('/login');
+    // }
+
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.error || 'Signup failed');
+  }
+};
+
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, {
+    //         username,
+    //         name,
+    //         email,
+    //         password,
+    //         role,
+    //       }) 
+    //             if (response.data.role === 'student') {
+    //     Navigate('/student-dashboard');
+    //   } else {
+    //     Navigate('/teacher-dashboard');
+    //   }
+    //        if (response.data.token) {
+    //             localStorage.setItem('token', response.data.token);
+    //             alert('Signup and verification successful!');
+    //             Navigate('/login');
+    //       }
+    //       // localStorage.getItem("token", response.data.token);
+    //       console.log(response.data.token)
+    //     } catch(error) {
+    //       console.log(error)
+    //       Navigate("/login");
+    //       alert(error.response?.data?.error || 'Signup failed');
+    //     }
+    // }
 
   //   const handleGoogleSignup = async (credentialResponse) => {
   //   try {
@@ -126,16 +162,27 @@ const Signup = () => {
           />
         </div>
 
-        <div className="mb-4">
-            <input
-            type="password"
-            id="password"
-            className="w-full px-4 py-2 text-gray-500 border border-gray-700 rounded focus:outline-none"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            />
-        </div>
+          <div className="mb-4 flex gap-4">
+              <input
+                type="password"
+                id="password"
+                className="flex-1 px-4 py-2 text-gray-500 border border-gray-700 rounded focus:outline-none"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="flex-1 px-4 py-3 text-gray-500 border border-gray-700 rounded-lg focus:outline-none  appearance-none transition"
+              >
+                <option className='bg-[#1D1C20]'  value="" disabled>Select role</option>
+                <option className='bg-[#1D1C20]' value="student">Student</option>
+                <option className='bg-[#1D1C20]' value="teacher">Teacher</option>
+              </select>
+            </div>
+
 
 
         <button

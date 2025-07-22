@@ -11,12 +11,15 @@ const client = new OAuth2Client(CLIENT_ID);
 
 const register = async (req, res) => {
     try {
-        const { username, name, email, password } = req.body;
+        const { username, name, email, password,role } = req.body;
         console.log('Received registration data:', { username, name, email });
 
-        if (!username || !name || !email || !password) {
+        if (!username || !name || !email || !password || !role) {
             return res.status(400).json({ message: 'All fields are required' });
         }
+        if (!['student', 'teacher'].includes(role)) {
+              return res.status(400).json({ message: 'Role must be student or teacher' });
+         }
         if (!email) return res.status(400).json({ error: "Email is required" });
         const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
         if (!gmailRegex.test(email)) {
@@ -39,6 +42,7 @@ const register = async (req, res) => {
             name,
             email,
             password ,
+            role
         })
         await newUser.save();
         // Optionally, you can generate a JWT token for the user
@@ -75,7 +79,17 @@ const login = async (req, res) => {
             return res.status(400).json({ message: "Incorrect password" });
         }
         const token = jwt.sign({ id: user._id , email: user.email}, process.env.JWT_SECRET, { expiresIn: "7d" });
-        res.status(200).json({ message: "Login successful", token, segregation: user.segregation });
+            res.status(200).json({
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                username: user.username,
+                role: user.role
+            }
+            });
         console.log('User logged in successfully:', user, token);
     } catch (err) {
         //console.error('Login Error:', err);
