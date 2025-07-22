@@ -13,7 +13,7 @@ const upload = multer({ storage });
 
 // 📌 TEACHER routes
 router.post(
-  '/courses',
+  '/',
   authMiddleware,
   requireRole('teacher'),
   upload.array('videos'), // Field name must match your frontend
@@ -21,7 +21,7 @@ router.post(
 );
 
 router.put(
-  '/courses/:id',
+  '/:id',
   authMiddleware,
   requireRole('teacher'),
   upload.array('videos'), // Optional updated videos
@@ -29,7 +29,7 @@ router.put(
 );
 
 router.delete(
-  '/courses/:id',
+  '/:id',
   authMiddleware,
   requireRole('teacher'),
   courseController.deleteCourse
@@ -37,14 +37,14 @@ router.delete(
 
 // 📌 STUDENT routes
 router.get(
-  '/courses',
+  '/',
   authMiddleware,
   requireRole('student'),
   courseController.getAllCourses
 );
 
 router.get(
-  '/courses/:id',
+  '/:id',
   authMiddleware,
   requireRole('student'),
   courseController.getCourseById
