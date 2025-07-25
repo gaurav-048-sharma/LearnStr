@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Menu from './Hero/Menu.jsx'
-import Syllabus from './Hero/Syllabus.jsx'
+import Course from './Hero/Course.jsx'
 import FAQ from './Hero/FAQ.jsx'
 import Footer from './Hero/Footer.jsx'
 
@@ -28,8 +28,7 @@ export default function Dashboard() {
   return (
    <section className="relative bg-black text-white">
       <Menu/>
-{/* 
-      <Syllabus/>  */}
+      <Course/>
       <FAQ/>
       <Footer/>
     </section>

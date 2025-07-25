@@ -202,7 +202,7 @@ export default function Navbar() {
                     <Menu.Item>
                      
                         <a href="#" className={`block px-4 py-2 `}>
-                            {users.username || 'Loading...'}
+                            {users.name || 'Loading...'}
                         </a>
                           {/* <a href="#" className={`block px-4 py-2 `}>
                             {users.role}

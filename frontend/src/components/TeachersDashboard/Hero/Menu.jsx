@@ -1,5 +1,5 @@
 import { Button } from '@headlessui/react';
-import React, { useState }  from 'react'
+import React,{useState}  from 'react'
 import { Link } from 'react-router-dom'
 
 const Menu = () => {
@@ -19,8 +19,8 @@ const Menu = () => {
             Master DSA, System Design, Core Subjects, and Interview Prep with a modern, seamless learning experience.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button onClick={openPopup} className="px-6 py-3 bg-amber-500 text-gray-900 font-semibold rounded hover:bg-amber-600 transition">
-              Get Started
+            <button onClick={openPopup}  className="px-6 py-3 bg-amber-500 text-gray-900 font-semibold rounded hover:bg-amber-600 transition">
+              Upload
             </button>
                 {isOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
@@ -32,8 +32,8 @@ const Menu = () => {
                       &times;
                     </button>
 
-                    <h2 className="text-2xl mb-4">Popup Content</h2>
-                    <p>
+                    <h2 className="text-gray-700 text-2xl mb-4">Popup Content</h2>
+                    <p className='text-gray-700'>
                       This is the content inside the popup. You can add forms, text,
                       images, anything you like here.
                     </p>
@@ -41,7 +41,7 @@ const Menu = () => {
                 </div>
               )}
             <button className="px-6 py-3 border border-amber-500 text-amber-500 font-semibold rounded hover:bg-amber-500 hover:text-gray-900 transition">
-              Learn More
+               Courses
             </button>
           </div>
         </div>

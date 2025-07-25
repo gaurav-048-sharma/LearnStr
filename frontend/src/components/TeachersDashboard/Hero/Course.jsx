@@ -63,7 +63,7 @@ const Course = () => {
   return (
 
 
-     <section className="w-full py-12 px-5 bg-[#1D1C20] text-white">
+     <section className="w-full mt-40 py-10 px-5 bg-[#1D1C20] text-white">
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="mb-10 text-center">
