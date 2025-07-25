@@ -271,7 +271,7 @@ export default function Navbar() {
           <a href="#" className="block px-5 py-2 hover:bg-amber-700">
             Interviews
           </a>
-          <button className="flex items-center px-3 py-3 bg-amber-700 rounded-lg">
+          <button onClick={handleLogout} className="flex items-center px-3 py-3 bg-amber-700 rounded-lg">
             <LogoutIcon className="w-5 h-5 mr-1" />
             Logout
           </button>

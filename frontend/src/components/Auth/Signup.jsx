@@ -25,20 +25,20 @@ const Signup = () => {
     // Store token first (if your backend sends it)
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
-      Navigate('/dashboard');
+      localStorage.setItem('role', response.data.role);
+      // Navigate('/dashboard');
     }
 
     alert('Signup successful!');
 
     // // Navigate based on role
-    // if (response.data.role === 'student') {
-    //   Navigate('/student-dashboard');
-    // } else if (response.data.role === 'teacher') {
-    //   Navigate('/teacher-dashboard');
-    // } else {
-    //   // fallback if no role matched
-    //   Navigate('/login');
-    // }
+    if (role === 'student') {
+      Navigate('/student-dashboard');
+    } else if (role === 'teacher') {
+      Navigate('/teacher-dashboard');
+    } else {
+      Navigate('/login'); // fallback
+    }
 
   } catch (error) {
     console.error(error);

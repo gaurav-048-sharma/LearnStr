@@ -47,7 +47,7 @@ const register = async (req, res) => {
         await newUser.save();
         // Optionally, you can generate a JWT token for the user
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-        res.status(201).json({ message: 'User registered successfully', user: newUser, token });
+        res.status(201).json({ message: 'User registered successfully', user: newUser,   token });
         console.log('User registered successfully:', newUser);
     } catch (error) {
         console.error('Error during registration:', error);

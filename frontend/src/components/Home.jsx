@@ -57,7 +57,7 @@ const Home = () => {
             Login as Teacher
           </button>
         </div>
-      </div>
+      </div> 
     </div>
   );
 };
