@@ -35,18 +35,20 @@ router.delete(
   courseController.deleteCourse
 );
 
+router.get('/teacher/:teacherId', courseController.getCoursesByTeacherId);
+
 // 📌 STUDENT routes
 router.get(
   '/',
   authMiddleware,
-  requireRole('student'),
+  // requireRole('student'),
   courseController.getAllCourses
 );
 
 router.get(
   '/:id',
   authMiddleware,
-  requireRole('student'),
+  // requireRole('student'),
   courseController.getCourseById
 );
 

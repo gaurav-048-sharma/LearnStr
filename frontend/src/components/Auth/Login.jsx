@@ -32,10 +32,10 @@ const Login = () => {
       } else if (response.data.role === "student") {
         navigate("/student-dashboard"); 
       } else {
-        navigate("/login");
+        navigate("/login"); 
       }
     } catch (error) {
-      alert(error.response?.data?.message || "Login failed.");
+      alert(error.response?.data?.message || "Login failed."); 
     }
   };
   // const handleSubmit = async (e) => {

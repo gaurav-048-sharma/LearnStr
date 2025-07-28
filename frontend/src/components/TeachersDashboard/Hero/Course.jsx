@@ -1,71 +1,42 @@
-import { Link } from "react-router-dom";
-
-const courses = [
-  {
-    id: 1,
-    title: "Data Structures & Algorithms",
-    description: "Master the fundamentals of coding with our DSA course.",
-    link: "/courses/dsa",
-    details: [
-      "What's included",
-      "All features",
-      "DSA, Core, Design & Aptitude",
-      "AI Doubt Support",
-      "Biweekly Sessions",
-      "Code Review",
-    ],
-  },
-  {
-    id: 2,
-    title: "System Design",
-    description: "Learn to architect scalable systems with our System Design course.",
-    link: "/courses/system-design",
-    details: [
-      "What's included",
-      "All features",
-      "Design Patterns & Case Studies",
-      "AI Doubt Support",
-      "Biweekly Sessions",
-      "Code Review",
-    ],
-  },
-  {
-    id: 3,
-    title: "Core Subjects",
-    description: "Strengthen your Computer Science core concepts.",
-    link: "/courses/core-subjects",
-    details: [
-      "What's included",
-      "All features",
-      "OS, DBMS, Networks",
-      "AI Doubt Support",
-      "Biweekly Sessions",
-      "Code Review",
-    ],
-  },
-  {
-    id: 4,
-    title: "Interviews",
-    description: "Ace technical and HR interviews with confidence.",
-    link: "/courses/interviews",
-    details: [
-      "What's included",
-      "All features",
-      "Mock Interviews & HR Prep",
-      "AI Doubt Support",
-      "Biweekly Sessions",
-      "Resume Review",
-    ],
-  },
-];
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const Course = () => {
+  const { id } = useParams(); // Get course ID from URL
+  const [course, setCourse] = useState(null);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/courses/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setCourse(res.data);
+        console.log("Fetched course:", res.data);
+      } catch (error) {
+        console.error("Failed to fetch course:", error);
+      }
+    };
+
+    if (id) {
+      fetchCourse();
+    }
+  }, [id, token]);
+
+  // if (!course) {
+  //   return <div className="text-center mt-20 text-white">Loading course...</div>;
+  // }
+
   return (
-
-
-     <section className="w-full mt-40 py-10 px-5 bg-[#1D1C20] text-white">
+    <section className="w-full mt-40 py-10 px-5 bg-[#1D1C20] text-white">
       <div className="max-w-7xl mx-auto">
-        {/* Heading */}
         <div className="mb-10 text-center">
           <h2 className="text-4xl font-extrabold mb-4">Explore Our Courses</h2>
           <p className="text-gray-300 max-w-2xl mx-auto">
@@ -73,38 +44,30 @@ const Course = () => {
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="flex overflow-x-auto overflow-y-hidden space-x-6 pb-4 bg-black rounded-2xl p-4 hide-scrollbar">
-          {courses.map((course) => (
-            <div
-              key={course.id}
-              className="w-[350px] bg-black rounded-2xl p-6 shadow-lg  flex-shrink-0 border border-amber-700"
-            >
-              <h3 className="text-2xl font-bold mb-2">{course.title}</h3>
-              <p className="mb-4 text-gray-400">{course.description}</p>
-
-              <ul className="mb-4 text-gray-300 list-disc list-inside space-y-1">
-                {course.details.map((detail, idx) => (
-                  <li key={idx}>{detail}</li>
-                ))}
-              </ul>
-
-              <Link
-                to={course.link}
-                className="inline-block bg-amber-700 text-black font-semibold px-4 py-2 rounded hover:bg-amber-900 transition"
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {course?.lessons?.length > 0 ? (
+            course.lessons.map((lesson, index) => (
+              <div
+                key={index}
+                className="bg-black rounded-2xl p-6 shadow-lg border border-amber-700"
               >
-                Explore
-              </Link>
-            </div>
-          ))}
+                <h3 className="text-xl font-bold mb-2">{lesson.title}</h3>
+                <video className="w-full rounded" controls src={lesson.videoURL}></video>
+                {/* {lesson.duration && (
+                  <p className="text-sm mt-2 text-gray-400">Duration: {lesson.duration} sec</p>
+                )} */}
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-400 col-span-full">
+              No lessons available yet.
+            </p>
+          )}
+
         </div>
       </div>
     </section>
+  );
+};
 
-
-    
-  
-  )
-}
-
-export default Course
+export default Course;

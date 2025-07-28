@@ -1,6 +1,6 @@
 // src/components/Dashboard/Dashboard.jsx
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Menu from './Hero/Menu.jsx'
 import Course from './Hero/Course.jsx'
 import FAQ from './Hero/FAQ.jsx'
@@ -11,6 +11,7 @@ import Footer from './Hero/Footer.jsx'
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const id = useParams()// Assuming you want to get the course ID from the URL
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -28,7 +29,7 @@ export default function Dashboard() {
   return (
    <section className="relative bg-black text-white">
       <Menu/>
-      <Course/>
+      <Course id={id}/>
       <FAQ/>
       <Footer/>
     </section>
