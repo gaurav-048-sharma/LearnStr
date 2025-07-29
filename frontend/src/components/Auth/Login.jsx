@@ -25,6 +25,7 @@ const Login = () => {
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem('role', response.data.user.role);
+     // localStorage.setItem('teacherId', response.data.user.id);
       console.log("Manual Login successful:", response.data);
       // navigate('/dashboard'); // Redirect to dashboard
       if (response.data.role === "teacher") {
@@ -37,6 +38,7 @@ const Login = () => {
     } catch (error) {
       alert(error.response?.data?.message || "Login failed."); 
     }
+     
   };
   // const handleSubmit = async (e) => {
   //   e.preventDefault();

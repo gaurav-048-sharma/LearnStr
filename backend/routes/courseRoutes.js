@@ -8,6 +8,7 @@ const { requireRole } = require('../middlewares/roleMiddleware.js');
 
 // Multer upload
 const multer = require('multer');
+const protectMiddleware = require('../middlewares/protectMiddleware.js');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -16,7 +17,7 @@ router.post(
   '/',
   authMiddleware,
   requireRole('teacher'),
-  upload.array('videos'), // Field name must match your frontend
+  upload.array('videos', 10), // Field name must match your frontend
   courseController.createCourse
 );
 
@@ -35,7 +36,8 @@ router.delete(
   courseController.deleteCourse
 );
 
-router.get('/teacher/:teacherId', courseController.getCoursesByTeacherId);
+router.get('/teacher',protectMiddleware, courseController.getCoursesByTeacherId);
+router.get('/teacher/:id', protectMiddleware, courseController.getCourseByIdForTeacher);
 
 // 📌 STUDENT routes
 router.get(

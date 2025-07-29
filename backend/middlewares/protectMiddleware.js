@@ -18,7 +18,10 @@ const protectMiddleware = async (req, res, next) => {
   } catch (error) {
     console.error(error);
     res.status(401).json({ message: 'Not authorized' });
-  }
+  } 
 };
 
 module.exports = protectMiddleware;
+
+
+

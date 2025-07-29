@@ -1,34 +1,28 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const Course = () => {
-  const { id } = useParams(); // Get course ID from URL
-  const [course, setCourse] = useState(null);
+  const [courses, setCourses] = useState([]);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchCourse = async () => {
+    const fetchCourses = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/courses/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setCourse(res.data);
-        console.log("Fetched course:", res.data);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/courses/teacher`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setCourses(res.data);
+        console.log("Fetched teacher's courses:", res.data);
       } catch (error) {
-        console.error("Failed to fetch course:", error);
+        console.error("Error fetching teacher's courses:", error);
       }
     };
 
-    if (id) {
-      fetchCourse();
-    }
-  }, [id, token]);
+    if (token) fetchCourses();
+  }, [token]);
 
   // if (!course) {
   //   return <div className="text-center mt-20 text-white">Loading course...</div>;
@@ -45,14 +39,14 @@ const Course = () => {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {course?.lessons?.length > 0 ? (
-            course.lessons.map((lesson, index) => (
+          {courses.length === 0? (
+            courses.map((course) => (
               <div
-                key={index}
+                key={course._id}
                 className="bg-black rounded-2xl p-6 shadow-lg border border-amber-700"
               >
-                <h3 className="text-xl font-bold mb-2">{lesson.title}</h3>
-                <video className="w-full rounded" controls src={lesson.videoURL}></video>
+                <h3 className="text-xl font-bold mb-2">{course.title}</h3>
+                <video className="w-full rounded" controls src={course.videoURL}></video>
                 {/* {lesson.duration && (
                   <p className="text-sm mt-2 text-gray-400">Duration: {lesson.duration} sec</p>
                 )} */}

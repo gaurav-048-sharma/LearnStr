@@ -1,6 +1,6 @@
 // src/components/Dashboard/Dashboard.jsx
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Menu from './Hero/Menu.jsx'
 import Course from './Hero/Course.jsx'
 import FAQ from './Hero/FAQ.jsx'
@@ -11,7 +11,7 @@ import Footer from './Hero/Footer.jsx'
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const id = useParams()// Assuming you want to get the course ID from the URL
+  //const id = useParams()// Assuming you want to get the course ID from the URL
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -20,7 +20,7 @@ export default function Dashboard() {
       console.warn('🔒 No token found, redirecting to login.');
       navigate('/login');
     }
-  }, []);
+  }, [navigate]);
 
     // const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -29,7 +29,7 @@ export default function Dashboard() {
   return (
    <section className="relative bg-black text-white">
       <Menu/>
-      <Course id={id}/>
+      <Course/>
       <FAQ/>
       <Footer/>
     </section>

@@ -6,12 +6,13 @@ import Layout from './components/Layout.jsx'
 // import Hero from './components/Dashboard/Hero.jsx'
 import StudentsDashboard from './components/StudentsDashboard/Dashboard.jsx';
 import TeacherDashboard from './components/TeachersDashboard/Dashboard.jsx';
-
+import CreateCourse from './components/TeachersDashboard/Hero/pages/Course/CreateCourse.jsx';
 import AuthCallback from './components/Auth/AuthCallback.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
 import SyllabusPage from './components/StudentsDashboard/Pages/SyllabusPage.jsx'
 import TeacherCourses from './components/TeachersDashboard/Hero/pages/Course/TeacherCourses.jsx';
+import TeacherCourseDetail from './components/TeachersDashboard/Hero/pages/Course/TeacherCourseDetail.jsx';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +38,9 @@ useEffect(() => {
     <Route path='/teacher-dashboard' element={<ProtectedRoute><TeacherDashboard /></ProtectedRoute>}/>
     <Route path="/student-dashboard" element={<ProtectedRoute><StudentsDashboard /></ProtectedRoute>}/>
     <Route path='/syllabuspage' element={<ProtectedRoute><SyllabusPage/></ProtectedRoute> }/>
-    <Route path='/courses/teacher' element={<ProtectedRoute><TeacherCourses /></ProtectedRoute>}/>
+    <Route path='/create-course' element={<ProtectedRoute><CreateCourse/></ProtectedRoute> }/>
+    <Route path="/courses" element={<ProtectedRoute> <TeacherCourses /> </ProtectedRoute> } />
+    <Route path="/course/:id" element={<ProtectedRoute> <TeacherCourseDetail /> </ProtectedRoute> } />
   </Route>
 
   {/* Public routes */}
