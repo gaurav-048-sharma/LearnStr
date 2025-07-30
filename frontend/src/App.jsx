@@ -10,6 +10,9 @@ import CreateCourse from './components/TeachersDashboard/Hero/pages/Course/Creat
 import AuthCallback from './components/Auth/AuthCallback.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import PublicRoute from './components/PublicRoute.jsx';
+import LearnMorePage from './components/StudentsDashboard/Pages/LearnMorePage.jsx';
+import CoursePage from './components/StudentsDashboard/Pages/Course/CoursePage.jsx';
+import CourseDetails from './components/StudentsDashboard/Pages/Course/CourseDetaiils.jsx';
 import SyllabusPage from './components/StudentsDashboard/Pages/SyllabusPage.jsx'
 import TeacherCourses from './components/TeachersDashboard/Hero/pages/Course/TeacherCourses.jsx';
 import TeacherCourseDetail from './components/TeachersDashboard/Hero/pages/Course/TeacherCourseDetail.jsx';
@@ -38,6 +41,10 @@ useEffect(() => {
     <Route path='/teacher-dashboard' element={<ProtectedRoute><TeacherDashboard /></ProtectedRoute>}/>
     <Route path="/student-dashboard" element={<ProtectedRoute><StudentsDashboard /></ProtectedRoute>}/>
     <Route path='/syllabuspage' element={<ProtectedRoute><SyllabusPage/></ProtectedRoute> }/>
+    <Route path='/student-courses' element={<ProtectedRoute><CoursePage/></ProtectedRoute> }/>
+    <Route path='/student-courses/:id' element={<ProtectedRoute><CourseDetails/></ProtectedRoute> }/>
+    <Route path='/learn' element={<ProtectedRoute><LearnMorePage/></ProtectedRoute> }/>
+    {/* Teacher routes */}
     <Route path='/create-course' element={<ProtectedRoute><CreateCourse/></ProtectedRoute> }/>
     <Route path="/courses" element={<ProtectedRoute> <TeacherCourses /> </ProtectedRoute> } />
     <Route path="/course/:id" element={<ProtectedRoute> <TeacherCourseDetail /> </ProtectedRoute> } />

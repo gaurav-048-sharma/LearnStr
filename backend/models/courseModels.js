@@ -27,6 +27,7 @@ const courseSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
+        public_id: { type: String },
         duration: {
           type: Number,
         },

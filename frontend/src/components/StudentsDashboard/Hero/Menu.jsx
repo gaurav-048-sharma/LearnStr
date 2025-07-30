@@ -40,9 +40,9 @@ const Menu = () => {
                   </div>
                 </div>
               )}
-            <button className="px-6 py-3 border border-amber-500 text-amber-500 font-semibold rounded hover:bg-amber-500 hover:text-gray-900 transition">
+            <Link to={"/learn"} className="px-6 py-3 border border-amber-500 text-amber-500 font-semibold rounded hover:bg-amber-500 hover:text-gray-900 transition">
               Learn More
-            </button>
+            </Link>
           </div>
         </div>
 

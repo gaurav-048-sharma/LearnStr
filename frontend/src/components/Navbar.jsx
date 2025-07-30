@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon, LogoutIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useNavigate, Link } from 'react-router-dom';
@@ -64,8 +64,20 @@ export default function Navbar() {
       // Always clear localStorage and redirect, regardless of server response
       localStorage.removeItem('token');
       localStorage.removeItem('userRole');
+      // Close mobile menu before navigating
+      setIsOpen(false);
       navigate('/login');
     }
+  };
+
+  // Toggle mobile menu
+  const toggleMobileMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Close mobile menu
+  const closeMobileMenu = () => {
+    setIsOpen(false);
   };
 
   // Get user role - check from state first, then localStorage as fallback
@@ -139,10 +151,10 @@ export default function Navbar() {
           
           {/* Logo Section */}
           <div className="flex-shrink-0 group">
-            <Link to="/" className="relative block">
+            <Link to="/" className="relative block" onClick={closeMobileMenu}>
               <img
                 className="h-10 w-12 object-contain filter group-hover:drop-shadow-lg transition-all duration-300 group-hover:scale-105"
-                src="/public/logo.png"
+                src="/logo.png"
                 alt="LearnStream Logo"
               />
               <div className="absolute -inset-2 bg-gradient-to-r from-amber-400/20 to-amber-600/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
@@ -173,6 +185,7 @@ export default function Navbar() {
                 </Menu.Button>
 
                 <Transition
+                  as={Fragment}
                   enter="transition ease-out duration-200"
                   enterFrom="transform opacity-0 scale-95 translate-y-1"
                   enterTo="transform opacity-100 scale-100 translate-y-0"
@@ -243,6 +256,7 @@ export default function Navbar() {
               </Menu.Button>
 
               <Transition
+                as={Fragment}
                 enter="transition ease-out duration-200"
                 enterFrom="transform opacity-0 scale-95 translate-y-1"
                 enterTo="transform opacity-100 scale-100 translate-y-0"
@@ -296,6 +310,7 @@ export default function Navbar() {
                               ? 'bg-gradient-to-r from-red-500/20 to-red-600/20 text-red-400' 
                               : 'text-gray-300 hover:text-red-400'
                           }`}
+                          type="button"
                         >
                           <LogoutIcon className="w-5 h-5 mr-3 transition-transform duration-200 group-hover:scale-110" />
                           <span className="font-medium">Sign Out</span>
@@ -314,111 +329,124 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <div className="flex md:hidden">
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={toggleMobileMenu}
               className="group inline-flex items-center justify-center p-2 rounded-xl 
                        hover:bg-white/10 focus:outline-none transition-all duration-300"
+              type="button"
+              aria-label="Toggle mobile menu"
+              aria-expanded={isOpen}
             >
-              <div className="relative w-6 h-6">
-                {isOpen ? (
-                  <XIcon className="block h-6 w-6 text-gray-300 group-hover:text-white transition-colors duration-300" />
-                ) : (
-                  <MenuIcon className="block h-6 w-6 text-gray-300 group-hover:text-white transition-colors duration-300" />
-                )}
-              </div>
+              {isOpen ? (
+                <XIcon className="block h-6 w-6 text-gray-300 group-hover:text-white transition-colors duration-300" />
+              ) : (
+                <MenuIcon className="block h-6 w-6 text-gray-300 group-hover:text-white transition-colors duration-300" />
+              )}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      <Transition
-        show={isOpen}
-        enter="transition ease-out duration-200"
-        enterFrom="opacity-0 scale-95"
-        enterTo="opacity-100 scale-100"
-        leave="transition ease-in duration-150"
-        leaveFrom="opacity-100 scale-100"
-        leaveTo="opacity-0 scale-95"
-      >
-        <div className="md:hidden border-t border-gray-600/30 bg-gradient-to-b from-transparent to-black/20">
-          <div className="px-4 pt-4 pb-6 space-y-2">
-            
-            {/* Mobile Navigation Links */}
-            {getNavigationItems().map((item, index) => (
-              <Link 
-                key={index}
-                to={item.href}
-                className="block px-4 py-3 rounded-xl text-gray-300 hover:text-white 
-                         hover:bg-gradient-to-r hover:from-amber-500/20 hover:to-amber-600/20 
-                         transition-all duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            
-            {/* Mobile Resources Section - Only for Students */}
-            {isStudent && (
-              <>
-                <div className="border-t border-gray-600/30 my-4"></div>
-                <div className="space-y-2">
-                  <p className="px-4 py-2 text-sm font-semibold text-amber-400">Resources</p>
-                  {resourcesItems.map((item, index) => (
-                    <Link 
-                      key={index}
-                      to={item.href}
-                      className="flex items-center px-6 py-3 rounded-xl text-gray-300 hover:text-white 
-                               hover:bg-gradient-to-r hover:from-amber-500/20 hover:to-amber-600/20 
-                               transition-all duration-300"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <span className="mr-3">{item.icon}</span>
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </>
-            )}
-            
-            <div className="border-t border-gray-600/30 my-4"></div>
-            
-            {/* Mobile User Section */}
-            <div className="space-y-3">
-              <div className="px-4 py-3 bg-gradient-to-r from-amber-500/10 to-amber-600/10 rounded-xl">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full flex items-center justify-center mr-3">
-                    <span className="text-sm font-bold text-white">
-                      {users.name ? users.name.charAt(0).toUpperCase() : 'U'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">{users.name || 'Loading...'}</p>
-                    <p className="text-xs text-gray-400 capitalize">
-                      {users.role || 'Loading...'} • {users.email || 'Loading...'}
-                    </p>
-                  </div>
-                </div>
-              </div>
+        {/* Mobile Menu - Using conditional rendering instead of Transition */}
+        {isOpen && (
+          <div className="md:hidden border-t border-gray-600/30 bg-gradient-to-b from-transparent to-black/20 animate-fadeIn">
+            <div className="px-4 pt-4 pb-6 space-y-2">
               
-              <button 
-                onClick={handleLogout} 
-                className="flex items-center w-full px-4 py-3 
-                         bg-gradient-to-r from-red-600 to-red-700 
-                         hover:from-red-700 hover:to-red-800 
-                         text-white rounded-xl shadow-lg hover:shadow-xl 
-                         transition-all duration-300 transform hover:scale-105"
-              >
-                <LogoutIcon className="w-5 h-5 mr-3" />
-                <span className="font-medium">Sign Out</span>
-              </button>
+              {/* Mobile Navigation Links */}
+              {getNavigationItems().map((item, index) => (
+                <Link 
+                  key={index}
+                  to={item.href}
+                  className="block px-4 py-3 rounded-xl text-gray-300 hover:text-white 
+                           hover:bg-gradient-to-r hover:from-amber-500/20 hover:to-amber-600/20 
+                           transition-all duration-300 transform hover:scale-[1.02]"
+                  onClick={closeMobileMenu}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              
+              {/* Mobile Resources Section - Only for Students */}
+              {isStudent && (
+                <>
+                  <div className="border-t border-gray-600/30 my-4"></div>
+                  <div className="space-y-2">
+                    <p className="px-4 py-2 text-sm font-semibold text-amber-400">Resources</p>
+                    {resourcesItems.map((item, index) => (
+                      <Link 
+                        key={index}
+                        to={item.href}
+                        className="flex items-center px-6 py-3 rounded-xl text-gray-300 hover:text-white 
+                                 hover:bg-gradient-to-r hover:from-amber-500/20 hover:to-amber-600/20 
+                                 transition-all duration-300 transform hover:scale-[1.02]"
+                        onClick={closeMobileMenu}
+                      >
+                        <span className="mr-3 text-lg">{item.icon}</span>
+                        <div>
+                          <div className="font-medium">{item.name}</div>
+                          <div className="text-xs text-gray-400">{item.desc}</div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              )}
+              
+              <div className="border-t border-gray-600/30 my-4"></div>
+              
+              {/* Mobile User Section */}
+              <div className="space-y-3">
+                <div className="px-4 py-3 bg-gradient-to-r from-amber-500/10 to-amber-600/10 rounded-xl">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full flex items-center justify-center mr-3">
+                      <span className="text-sm font-bold text-white">
+                        {users.name ? users.name.charAt(0).toUpperCase() : 'U'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">{users.name || 'Loading...'}</p>
+                      <p className="text-xs text-gray-400 capitalize">
+                        {users.role || 'Loading...'} • {users.email || 'Loading...'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <button 
+                  onClick={handleLogout} 
+                  className="flex items-center w-full px-4 py-3 
+                           bg-gradient-to-r from-red-600 to-red-700 
+                           hover:from-red-700 hover:to-red-800 
+                           text-white rounded-xl shadow-lg hover:shadow-xl 
+                           transition-all duration-300 transform hover:scale-[1.02]"
+                  type="button"
+                >
+                  <LogoutIcon className="w-5 h-5 mr-3" />
+                  <span className="font-medium">Sign Out</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </Transition>
+        )}
+      </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out;
+        }
+      `}</style>
     </nav>
   );
 }
-
 
 
 

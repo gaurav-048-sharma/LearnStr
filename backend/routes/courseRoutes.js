@@ -21,18 +21,25 @@ router.post(
   courseController.createCourse
 );
 
+// router.put(
+//   '/:id',
+//   authMiddleware,
+//   requireRole('teacher'),
+//   upload.array('videos'), // Optional updated videos
+//   courseController.updateCourse
+// );
 router.put(
-  '/:id',
+  '/update/:id',
   authMiddleware,
   requireRole('teacher'),
-  upload.array('videos'), // Optional updated videos
+  upload.array('videos', 10), // multiple video uploads
   courseController.updateCourse
 );
 
 router.delete(
   '/:id',
   authMiddleware,
-  requireRole('teacher'),
+  requireRole('teacher'), // ensures user has teacher role
   courseController.deleteCourse
 );
 
