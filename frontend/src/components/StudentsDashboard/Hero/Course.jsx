@@ -71,7 +71,7 @@ const Course = () => {
   }
 
   return (
-    <section className="w-full py-12 px-5 bg-[#1D1C20] text-white">
+    <section className="w-full py-12 px-5 bg-black text-white">
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="mb-10 text-center">
@@ -97,7 +97,7 @@ const Course = () => {
         {/* Cards Container */}
         {courses.length > 0 && (
           <div className="relative">
-            <div className="flex overflow-x-auto overflow-y-hidden space-x-6 pb-4 bg-black rounded-2xl p-4 hide-scrollbar">
+            <div className="flex overflow-x-auto overflow-y-hidden space-x-6 pb-4 bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-2xl p-4 hide-scrollbar">
               {courses.map((course, index) => (
                 <div
                   key={course._id}

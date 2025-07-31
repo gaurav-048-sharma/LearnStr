@@ -88,7 +88,7 @@ export default function Navbar() {
   // Navigation items based on role
   const getNavigationItems = () => {
     const baseItems = [
-      { name: 'Home', href: '/', show: true },
+      // { name: 'Home', href: '/', show: true },
     ];
 
     // Add role-specific items
@@ -100,9 +100,9 @@ export default function Navbar() {
       );
     } else if (isStudent) {
       baseItems.push(
-        { name: 'Pricing', href: '/pricing', show: true },
+        // { name: 'Pricing', href: '/pricing', show: true },
         { name: 'Dashboard', href: '/student-dashboard', show: true },
-        { name: 'My Courses', href: '/my-courses', show: true }
+        { name: 'My Courses', href: '/student-courses', show: true }
       );
     }
 

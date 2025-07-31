@@ -72,7 +72,8 @@ const Resources = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <div className="min-h-screen bg-black">
+      {/* bg-gradient-to-br from-gray-900 via-black to-gray-900 */}
       <section className="max-w-7xl mx-auto px-4 py-16">
         {/* Header Section */}
         <div className="text-center mb-16">
