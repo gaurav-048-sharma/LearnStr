@@ -61,8 +61,8 @@ app.use("/api/courses", courseRoutes);
 
 
 
-app.listen(port, (req, res) => {
-    console.log(`Server is running on port ${port}`);
-}) // remove this line if you want to use the app in a serverless environment
+// app.listen(port, (req, res) => {
+//     console.log(`Server is running on port ${port}`);
+// }) // remove this line if you want to use the app in a serverless environment
 
-//module.exports = app; // Export the app for testing or serverless deployment
+module.exports = app; // Export the app for testing or serverless deployment

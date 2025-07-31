@@ -365,7 +365,7 @@ export default function Navbar() {
               ))}
               
               {/* Mobile Resources Section - Only for Students */}
-              {isStudent && (
+              {/* {isStudent && (
                 <>
                   <div className="border-t border-gray-600/30 my-4"></div>
                   <div className="space-y-2">
@@ -388,7 +388,7 @@ export default function Navbar() {
                     ))}
                   </div>
                 </>
-              )}
+              )} */}
               
               <div className="border-t border-gray-600/30 my-4"></div>
               
